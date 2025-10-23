@@ -2,9 +2,9 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import MenuScreen from './screens/MenuScreen';
-import CalendarScreen from './screens/CalendarScreen';
-import SettingsScreen from './screens/SettingsScreen';
+import MenuScreen from './modules/menu/components/screens/MenuScreen';
+import CalendarScreen from './modules/calendar/components/screens/CalendarScreen';
+import SettingsScreen from './modules/settings/components/screens/SettingsScreen';
 
 const Stack = createNativeStackNavigator();
 
