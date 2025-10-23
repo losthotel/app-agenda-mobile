@@ -5,7 +5,7 @@ export default function MenuScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../../assets/logo.png')} // cria uma logo e põe em assets se quiser
+        uri='assets/logo.png'
         style={styles.logo}
       />
       <Text style={styles.title}>Minha Agenda Pessoal</Text>
