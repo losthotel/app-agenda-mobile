@@ -1,3 +1,3 @@
 //Aqui terá os códigos da notificação
 //Teste de lindalva
-//Configuraçoes aqui
+//Configuraçoes aqui...
