@@ -54,7 +54,8 @@ export default function SettingsScreen() {
   return (
     <View style={styles.container}>
       
-      <Text style={styles.title}>Configurações</Text>
+      {/* Mantendo o título da feat/novas-funcoes */}
+      <Text style={styles.title}>Configurações da Agenda</Text>
 
       {/* Tema */}
       <View style={styles.option}>
