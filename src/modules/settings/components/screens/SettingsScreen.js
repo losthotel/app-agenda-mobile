@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Switch, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { ThemeContext } from '../../../../contexts/ThemeContext';
 
 export default function SettingsScreen() {
   const navigation = useNavigation();
 
-  const [darkMode, setDarkMode] = useState(false);
+  // <<< PEGAMOS O TEMA DO CONTEXT >>>
+  const { theme, toggleTheme, darkMode } = useContext(ThemeContext);
+
   const [notifications, setNotifications] = useState(true);
   const [vibration, setVibration] = useState(true);
   const [sound, setSound] = useState(true);
@@ -20,7 +23,7 @@ export default function SettingsScreen() {
     const saved = await AsyncStorage.getItem('settings');
     if (saved) {
       const config = JSON.parse(saved);
-      setDarkMode(config.darkMode);
+
       setNotifications(config.notifications);
       setVibration(config.vibration);
       setSound(config.sound);
@@ -52,22 +55,24 @@ export default function SettingsScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      
-      <Text style={styles.title}>Configurações</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+
+      <Text style={[styles.title, { color: theme.text }]}>
+        Configurações
+      </Text>
 
       {/* Tema */}
-      <View style={styles.option}>
-        <Text style={styles.optionText}>Tema escuro</Text>
+      <View style={[styles.option, { backgroundColor: theme.card }]}>
+        <Text style={[styles.optionText, { color: theme.text }]}>Tema escuro</Text>
         <Switch
           value={darkMode}
-          onValueChange={(v) => { setDarkMode(v); saveSettings("darkMode", v); }}
+          onValueChange={toggleTheme}
         />
       </View>
 
       {/* Notificações */}
-      <View style={styles.option}>
-        <Text style={styles.optionText}>Notificações</Text>
+      <View style={[styles.option, { backgroundColor: theme.card }]}>
+        <Text style={[styles.optionText, { color: theme.text }]}>Notificações</Text>
         <Switch
           value={notifications}
           onValueChange={(v) => { setNotifications(v); saveSettings("notifications", v); }}
@@ -75,8 +80,8 @@ export default function SettingsScreen() {
       </View>
 
       {/* Vibração */}
-      <View style={styles.option}>
-        <Text style={styles.optionText}>Vibração</Text>
+      <View style={[styles.option, { backgroundColor: theme.card }]}>
+        <Text style={[styles.optionText, { color: theme.text }]}>Vibração</Text>
         <Switch
           value={vibration}
           onValueChange={(v) => { setVibration(v); saveSettings("vibration", v); }}
@@ -84,8 +89,8 @@ export default function SettingsScreen() {
       </View>
 
       {/* Som */}
-      <View style={styles.option}>
-        <Text style={styles.optionText}>Som dos lembretes</Text>
+      <View style={[styles.option, { backgroundColor: theme.card }]}>
+        <Text style={[styles.optionText, { color: theme.text }]}>Som dos lembretes</Text>
         <Switch
           value={sound}
           onValueChange={(v) => { setSound(v); saveSettings("sound", v); }}
@@ -93,13 +98,19 @@ export default function SettingsScreen() {
       </View>
 
       {/* Limpar agenda */}
-      <TouchableOpacity style={styles.clearButton} onPress={clearAllEvents}>
+      <TouchableOpacity
+        style={[styles.clearButton]}
+        onPress={clearAllEvents}
+      >
         <Feather name="trash-2" size={18} color="white" />
         <Text style={styles.clearButtonText}>Limpar todos os eventos</Text>
       </TouchableOpacity>
 
       {/* Voltar */}
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        style={[styles.backButton]}
+        onPress={() => navigation.goBack()}
+      >
         <Feather name="arrow-left" size={18} color="white" />
         <Text style={styles.backButtonText}>Voltar</Text>
       </TouchableOpacity>
@@ -111,11 +122,9 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#282836',
     padding: 20,
   },
   title: {
-    color: 'white',
     fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'center',
@@ -125,13 +134,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#3b3b5c',
     padding: 15,
     borderRadius: 12,
     marginBottom: 15,
   },
   optionText: {
-    color: 'white',
     fontSize: 16,
   },
   clearButton: {

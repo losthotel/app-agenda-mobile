@@ -1,27 +1,47 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { ThemeContext } from '../../../../contexts/ThemeContext';
 
 export default function MenuScreen({ navigation }) {
+
+  const { theme, darkMode } = useContext(ThemeContext);
+
   return (
     <LinearGradient
-      colors={['#2e2e47', '#1e1e2f']}
-      style={styles.container}
+      colors={darkMode ? ['#2e2e47', '#1e1e2f'] : ['#ffffff', '#e7e7e7']}
+      style={[styles.container]}
     >
-    <Image
-      source={{ uri: 'https://i.ibb.co/GQ9xPRnC/agenda2.png' }}
-      style={styles.logo}
-    />
-      {/* <Text style={styles.title}>AgendaGO</Text> */}
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Calendário')}>
-        <Text style={styles.buttonText}>📅 Calendário</Text>
+
+      <Image
+        source={{ uri: 'https://i.ibb.co/GQ9xPRnC/agenda2.png' }}
+        style={styles.logo}
+      />
+
+      {/* Botão Calendário */}
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: theme.card }]}
+        onPress={() => navigation.navigate('Calendário')}
+      >
+        <Text style={[styles.buttonText, { color: theme.text }]}>
+          📅 Calendário
+        </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Configurações')}>
-        <Text style={styles.buttonText}>⚙️ Configurações</Text>
+      {/* Botão Configurações */}
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: theme.card }]}
+        onPress={() => navigation.navigate('Configurações')}
+      >
+        <Text style={[styles.buttonText, { color: theme.text }]}>
+          ⚙️ Configurações
+        </Text>
       </TouchableOpacity>
 
-      <Text style={styles.footer}>Versão 2.0.0</Text>
+      <Text style={[styles.footer, { color: theme.textSecondary }]}>
+        Versão 2.0.0
+      </Text>
+
     </LinearGradient>
   );
 }
@@ -43,15 +63,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 6,
   },
-  title: {
-    color: '#fff',
-    fontSize: 24,
-    marginBottom: 40,
-    fontWeight: 'bold',
-    letterSpacing: 1,
-  },
   button: {
-    backgroundColor: '#3b3b5c',
     width: '80%',
     paddingVertical: 15,
     borderRadius: 12,
@@ -64,14 +76,12 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonText: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: '600',
   },
   footer: {
     position: 'absolute',
     bottom: 20,
-    color: '#aaa',
     fontSize: 12,
     textAlign: 'center',
   },
