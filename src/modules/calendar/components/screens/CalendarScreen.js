@@ -138,9 +138,12 @@ export default function CalendarScreen() {
             <Text style={styles.menuText}>Editar conta</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.menuItem, { borderBottomWidth: 0 }]}>
-            <Text style={styles.menuText}>Configurações</Text>
-          </TouchableOpacity>
+          <TouchableOpacity
+          style={[styles.menuItem, { borderBottomWidth: 0 }]}
+          onPress={() => navigation.navigate("SettingsScreen")}
+        >
+          <Text style={styles.menuText}>Configurações</Text>
+        </TouchableOpacity>
         </View>
       )}
 

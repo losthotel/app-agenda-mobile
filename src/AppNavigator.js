@@ -16,6 +16,7 @@ export default function AppNavigator() {
         <Stack.Screen name="Calendário" component={CalendarScreen} />
         <Stack.Screen name="Configurações" component={SettingsScreen} />
         <Stack.Screen name="ReturnMenu" component={MenuScreen} />
+        <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
