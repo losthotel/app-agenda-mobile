@@ -12,7 +12,7 @@ export default function AppNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Menu" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Menu" component={CalendarScreen} />
+        <Stack.Screen name="Menu" component={MenuScreen} />
         <Stack.Screen name="Calendário" component={CalendarScreen} />
         <Stack.Screen name="Configurações" component={SettingsScreen} />
         <Stack.Screen name="ReturnMenu" component={MenuScreen} />
