@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, TouchableOpacity, Modal, TextInput, FlatList, StyleSheet, Platform
+  View, Text, TouchableOpacity, Modal, TextInput, FlatList, StyleSheet, Platform, Image
 } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -30,12 +30,15 @@ export default function CalendarScreen() {
   const [newTask, setNewTask] = useState('');
   const [description, setDescription] = useState('');
   const [time, setTime] = useState('');
-  
+
   // NOVOS: notificações
   const [taskDatePicker, setTaskDatePicker] = useState(new Date());
   const [taskTimePicker, setTaskTimePicker] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
+
+  // NOVO: menu do perfil
+  const [profileMenu, setProfileMenu] = useState(false);
 
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
@@ -60,12 +63,10 @@ export default function CalendarScreen() {
   const handleAddTask = async () => {
     if (!selectedDate || !newTask.trim()) return;
 
-    // Junta data do calendário com horário do picker
     const finalDate = new Date(selectedDate);
     finalDate.setHours(taskTimePicker.getHours());
     finalDate.setMinutes(taskTimePicker.getMinutes());
 
-    // Agendar notificação
     await scheduleTaskNotification(newTask, finalDate);
 
     const updated = {
@@ -84,7 +85,6 @@ export default function CalendarScreen() {
     };
 
     saveTasks(updated);
-
     setNewTask('');
     setDescription('');
     setTime('');
@@ -108,7 +108,6 @@ export default function CalendarScreen() {
     return local.toLocaleDateString("pt-BR", { day: "2-digit", month: "long" });
   };
 
-  // MARCA DATAS
   const markedDates = {
     ...Object.keys(tasks).reduce((acc, date) => {
       acc[date] = { marked: true, dotColor: "#A855F7" };
@@ -121,6 +120,30 @@ export default function CalendarScreen() {
 
   return (
     <LinearGradient colors={["#2e2e47", "#1e1e2f"]} style={styles.background}>
+
+      {/* 🔵 BOLA PERFIL — NÃO ALTERA NADA DO DESIGN */}
+      <TouchableOpacity
+        style={styles.profileButton}
+        onPress={() => setProfileMenu(!profileMenu)}
+      >
+        <Image
+          source={{ uri: "https://i.pravatar.cc/300" }}
+          style={styles.profileImage}
+        />
+      </TouchableOpacity>
+
+      {profileMenu && (
+        <View style={styles.profileMenu}>
+          <TouchableOpacity style={styles.menuItem}>
+            <Text style={styles.menuText}>Editar conta</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.menuItem, { borderBottomWidth: 0 }]}>
+            <Text style={styles.menuText}>Configurações</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
       <FlatList
         data={selectedTasks}
         keyExtractor={(item) => item.id.toString()}
@@ -168,6 +191,7 @@ export default function CalendarScreen() {
             )}
           </>
         }
+
         renderItem={({ item }) => (
           <View style={styles.card}>
             <View style={styles.taskItem}>
@@ -192,13 +216,17 @@ export default function CalendarScreen() {
             </View>
           </View>
         )}
+
         ListEmptyComponent={
           <View style={[styles.card, styles.noTask]}>
             <Feather name="clock" size={40} color="#A1A1AA" />
             <Text style={styles.noTaskText}>Nenhum evento hoje</Text>
           </View>
         }
-        ListFooterComponent={
+
+          /*    BOTÃO VOLTAR  */
+  
+    /*     ListFooterComponent={
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => navigation.navigate("ReturnMenu")}
@@ -206,7 +234,9 @@ export default function CalendarScreen() {
             <Feather name="arrow-left" size={18} color="white" />
             <Text style={styles.backButtonText}>Voltar</Text>
           </TouchableOpacity>
-        }
+        } */
+
+        
       />
 
       {/* MODAL NOVO EVENTO */}
@@ -223,7 +253,6 @@ export default function CalendarScreen() {
               placeholderTextColor="#A1A1AA"
             />
 
-            {/* Picker de Hora (substitui seu input antigo) */}
             <TouchableOpacity
               onPress={() => setShowTimePicker(true)}
               style={styles.input}
@@ -273,15 +302,54 @@ export default function CalendarScreen() {
                 </Text>
               </TouchableOpacity>
             </View>
+
           </View>
         </View>
       </Modal>
+
     </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   background: { flex: 1 },
+
+  /* 🔵 PERFIL */
+  profileButton: {
+  position: "absolute",
+  right: 10,
+  top: 10, // ajuste de posição
+  zIndex: 999,
+  },
+  profileImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: "#A855F7"
+  },
+  profileMenu: {
+    position: "absolute",
+    top: 65,
+    right: 20,
+    backgroundColor: "#3b3b5c",
+    borderRadius: 12,
+    paddingVertical: 6,
+    width: 160,
+    zIndex: 999,
+    borderWidth: 1,
+    borderColor: "#A855F7"
+  },
+  menuItem: {
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#444"
+  },
+  menuText: {
+    color: "#fff",
+    fontSize: 15
+  },
+
   container: { padding: 16, paddingBottom: 40 },
   header: {
     flexDirection: "row",
